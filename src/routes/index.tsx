@@ -5,13 +5,8 @@ import { AyahCard } from "@/components/AyahCard";
 import { ProgressRing } from "@/components/ProgressRing";
 import { StreakStrip } from "@/components/StreakStrip";
 import { AudioPlayer } from "@/components/AudioPlayer";
-import {
-  computeStreak,
-  getDailyAyah,
-  getReadLog,
-  markRead,
-  type Ayah,
-} from "@/lib/quran-api";
+import { computeStreak, getReadLog, type Ayah } from "@/lib/quran-api";
+import { getDailyVerse, updateUserStreak } from "@/services/quranApi";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -32,7 +27,7 @@ function HomePage() {
   const [readToday, setReadToday] = useState(false);
 
   useEffect(() => {
-    getDailyAyah().then(setAyah);
+    getDailyVerse().then(setAyah);
     const log = getReadLog();
     setReadLog(log);
     const today = new Date().toISOString().slice(0, 10);
@@ -44,9 +39,8 @@ function HomePage() {
 
   const handleMark = async () => {
     if (!ayah) return;
-    const { } = await markRead(ayah.id);
-    const log = getReadLog();
-    setReadLog(log);
+    await updateUserStreak(ayah.id);
+    setReadLog(getReadLog());
     setReadToday(true);
   };
 
@@ -63,7 +57,11 @@ function HomePage() {
           <p className="text-[11px] uppercase tracking-[0.22em] text-gold">{greeting}</p>
           <h1 className="font-display text-3xl text-teal">Bayan</h1>
         </div>
-        <ProgressRing value={progress} label={`${readToday ? 1 : 0}/1`} sub="Today" />
+          <ProgressRing
+            value={progress}
+            label={readToday ? "1/1" : "0/1"}
+            sub={readToday ? "Complete" : "Today"}
+          />
       </motion.header>
 
       <section className="space-y-2">

@@ -42,6 +42,16 @@ export function AyahCard({ ayah, variant = "compact", onMarkRead, showMarkRead }
         className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full opacity-30"
         style={{ background: "var(--gradient-gold)", filter: "blur(40px)" }}
       />
+      {variant === "hero" && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-3xl"
+          style={{
+            background:
+              "linear-gradient(160deg, color-mix(in oklab, var(--gold) 22%, transparent) 0%, transparent 38%, transparent 62%, color-mix(in oklab, var(--gold) 14%, transparent) 100%)",
+          }}
+        />
+      )}
 
       <header className="relative mb-5 flex items-center justify-between">
         <div className="flex items-center gap-2">
