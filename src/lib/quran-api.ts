@@ -79,7 +79,7 @@ export function listCollections(): string[] {
 /** Mood-based discovery — curated sets per emotion */
 export async function moodSearch(mood: string): Promise<Ayah[]> {
   // TODO: wire to Quran MCP -> /search/mood/:mood
-  return MOCK_RESULTS;
+  return semanticSearch(mood);
 }
 
 /** Audio recitation stream URL */
