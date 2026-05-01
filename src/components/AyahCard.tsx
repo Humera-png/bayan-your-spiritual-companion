@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, ChevronDown, Sparkles, Plus, Check } from "lucide-react";
+import { Heart, ChevronDown, Sparkles, Plus, Check, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import type { Ayah } from "@/lib/quran-api";
 import { saveToCollection, listCollections } from "@/lib/quran-api";
+import { ShareImageModal } from "@/components/ShareImageModal";
 
 interface Props {
   ayah: Ayah;
@@ -17,6 +18,7 @@ export function AyahCard({ ayah, variant = "compact", onMarkRead, showMarkRead }
   const [saved, setSaved] = useState(false);
   const [glow, setGlow] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const [collections, setCollections] = useState<string[]>(() =>
     typeof window !== "undefined" ? listCollections() : [],
   );
@@ -86,15 +88,24 @@ export function AyahCard({ ayah, variant = "compact", onMarkRead, showMarkRead }
             </p>
           </div>
         </div>
-        <button
-          onClick={handleHeart}
-          className={`rounded-full p-2 transition hover:bg-accent ${
-            saved ? "text-gold" : "text-teal/70 hover:text-gold"
-          }`}
-          aria-label="Save to collection"
-        >
-          <Heart size={18} fill={saved ? "currentColor" : "none"} />
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setShareOpen(true)}
+            className="haptic rounded-full p-2 text-teal/70 transition hover:bg-accent hover:text-gold"
+            aria-label="Share as light"
+          >
+            <Share2 size={17} />
+          </button>
+          <button
+            onClick={handleHeart}
+            className={`haptic rounded-full p-2 transition hover:bg-accent ${
+              saved ? "text-gold" : "text-teal/70 hover:text-gold"
+            }`}
+            aria-label="Save to collection"
+          >
+            <Heart size={18} fill={saved ? "currentColor" : "none"} />
+          </button>
+        </div>
       </header>
 
       <p
@@ -144,11 +155,13 @@ export function AyahCard({ ayah, variant = "compact", onMarkRead, showMarkRead }
       {showMarkRead && (
         <button
           onClick={handleRead}
-          className="bg-gradient-teal mt-6 w-full rounded-2xl py-3 text-sm font-medium text-cream shadow-soft transition active:scale-[0.98]"
+          className="haptic bg-gradient-teal mt-6 w-full rounded-2xl py-3 text-sm font-medium text-cream shadow-soft"
         >
           Mark as Read
         </button>
       )}
+
+      <ShareImageModal ayah={ayah} open={shareOpen} onClose={() => setShareOpen(false)} />
 
       <AnimatePresence>
         {pickerOpen && (

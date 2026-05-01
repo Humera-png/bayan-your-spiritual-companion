@@ -89,7 +89,7 @@ function WelcomePage() {
         <Link
           to="/auth"
           search={{ mode: "signup" }}
-          className="bg-gradient-teal shadow-glass flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-medium text-cream transition active:scale-[0.99]"
+          className="haptic bg-gradient-teal shadow-glass flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-medium text-cream"
         >
           Get started
           <ArrowRight size={16} />

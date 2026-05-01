@@ -33,14 +33,27 @@ export function signIn(email: string, _password: string): BayanUser {
     email,
   };
   localStorage.setItem(KEY, JSON.stringify(user));
+  try {
+    const prefs = JSON.parse(localStorage.getItem("bayan.prefs") || "{}");
+    prefs.onboarded = true;
+    localStorage.setItem("bayan.prefs", JSON.stringify(prefs));
+  } catch {}
   window.dispatchEvent(new Event("bayan:auth"));
+  window.dispatchEvent(new Event("bayan:prefs"));
   return user;
 }
 
 export function signUp(name: string, email: string, _password: string): BayanUser {
   const user: BayanUser = { id: crypto.randomUUID(), name: name || "Friend", email };
   localStorage.setItem(KEY, JSON.stringify(user));
+  // mark fresh signup → needs onboarding
+  try {
+    const prefs = JSON.parse(localStorage.getItem("bayan.prefs") || "{}");
+    delete prefs.onboarded;
+    localStorage.setItem("bayan.prefs", JSON.stringify(prefs));
+  } catch {}
   window.dispatchEvent(new Event("bayan:auth"));
+  window.dispatchEvent(new Event("bayan:prefs"));
   return user;
 }
 

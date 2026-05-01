@@ -24,7 +24,7 @@ export function StreakStrip({ readLog }: Props) {
   }
 
   return (
-    <div className="glass shadow-soft flex items-center justify-between rounded-2xl px-3 py-3">
+    <div suppressHydrationWarning className="glass shadow-soft flex items-center justify-between rounded-2xl px-3 py-3">
       {days.map((d, i) => (
         <motion.div
           key={d.key}

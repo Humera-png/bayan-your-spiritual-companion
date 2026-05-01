@@ -93,24 +93,27 @@ function ExplorePage() {
 
       <form
         onSubmit={onSubmit}
-        className="glass shadow-soft flex items-center gap-2 rounded-2xl px-4 py-3"
+        className="glass-strong shadow-soft flex items-center gap-2 rounded-2xl px-4 py-3"
       >
         <Search size={18} className="text-teal/60" />
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="What is on your heart?"
+          placeholder="Ask the Quran anything (e.g., 'How do I deal with loss?')"
           className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground/80 focus:outline-none"
         />
         {query && (
           <button
             type="submit"
-            className="bg-gradient-gold rounded-full px-3 py-1.5 text-xs font-medium text-teal"
+            className="haptic bg-gradient-gold rounded-full px-3 py-1.5 text-xs font-medium text-teal"
           >
             Ask
           </button>
         )}
       </form>
+      <p className="-mt-3 px-1 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+        Powered by Quran MCP · semantic search
+      </p>
 
       <section>
         <div className="mb-3 flex items-center gap-2 px-1">
@@ -122,11 +125,11 @@ function ExplorePage() {
             {TOPICS.map((t) => {
               const isActive = active === t;
               return (
-                <motion.button
+              <motion.button
                   key={t}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => onTopic(t)}
-                  className={`shrink-0 rounded-full px-4 py-2 text-sm transition ${
+                  className={`haptic shrink-0 rounded-full px-4 py-2 text-sm transition ${
                     isActive
                       ? "bg-gradient-teal text-cream shadow-soft"
                       : "glass text-teal hover:text-gold"
@@ -213,6 +216,14 @@ function ResultCard({ verse, index }: { verse: VerseSnippet; index: number }) {
         {verse.arabic}
       </p>
       <p className="text-sm leading-relaxed text-foreground/80">“{verse.snippet}”</p>
+      {verse.context && (
+        <div className="mt-3 border-t border-gold/15 pt-3">
+          <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-gold">Context</p>
+          <p className="mt-1 text-[12px] leading-relaxed text-muted-foreground">
+            {verse.context}
+          </p>
+        </div>
+      )}
     </motion.article>
   );
 }

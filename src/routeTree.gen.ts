@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SavedRouteImport } from './routes/saved'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
@@ -29,6 +30,11 @@ const SettingsRoute = SettingsRouteImport.update({
 const SavedRoute = SavedRouteImport.update({
   id: '/saved',
   path: '/saved',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExploreRoute = ExploreRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/explore': typeof ExploreRoute
+  '/onboarding': typeof OnboardingRoute
   '/saved': typeof SavedRoute
   '/settings': typeof SettingsRoute
   '/welcome': typeof WelcomeRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/explore': typeof ExploreRoute
+  '/onboarding': typeof OnboardingRoute
   '/saved': typeof SavedRoute
   '/settings': typeof SettingsRoute
   '/welcome': typeof WelcomeRoute
@@ -68,20 +76,36 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/explore': typeof ExploreRoute
+  '/onboarding': typeof OnboardingRoute
   '/saved': typeof SavedRoute
   '/settings': typeof SettingsRoute
   '/welcome': typeof WelcomeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/explore' | '/saved' | '/settings' | '/welcome'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/explore'
+    | '/onboarding'
+    | '/saved'
+    | '/settings'
+    | '/welcome'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/explore' | '/saved' | '/settings' | '/welcome'
+  to:
+    | '/'
+    | '/auth'
+    | '/explore'
+    | '/onboarding'
+    | '/saved'
+    | '/settings'
+    | '/welcome'
   id:
     | '__root__'
     | '/'
     | '/auth'
     | '/explore'
+    | '/onboarding'
     | '/saved'
     | '/settings'
     | '/welcome'
@@ -91,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   ExploreRoute: typeof ExploreRoute
+  OnboardingRoute: typeof OnboardingRoute
   SavedRoute: typeof SavedRoute
   SettingsRoute: typeof SettingsRoute
   WelcomeRoute: typeof WelcomeRoute
@@ -117,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/saved'
       fullPath: '/saved'
       preLoaderRoute: typeof SavedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/explore': {
@@ -147,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   ExploreRoute: ExploreRoute,
+  OnboardingRoute: OnboardingRoute,
   SavedRoute: SavedRoute,
   SettingsRoute: SettingsRoute,
   WelcomeRoute: WelcomeRoute,
