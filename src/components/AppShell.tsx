@@ -1,9 +1,10 @@
 import { Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Home, Compass, Heart, Settings as SettingsIcon } from "lucide-react";
+import { Home, Compass, Heart, Settings as SettingsIcon, RefreshCw } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
-import { getCurrentUser } from "@/lib/auth";
+import { auth, getPreferences } from "@/services/quranApi";
 
 const tabs = [
   { to: "/", label: "Home", icon: Home },
@@ -12,22 +13,28 @@ const tabs = [
   { to: "/settings", label: "Settings", icon: SettingsIcon },
 ] as const;
 
-const PUBLIC_PATHS = ["/welcome", "/auth"];
+const PUBLIC_PATHS = ["/welcome", "/auth", "/onboarding"];
 
 export function AppShell() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
   const [ready, setReady] = useState(false);
   const [authed, setAuthed] = useState(false);
+  const [onboarded, setOnboarded] = useState(true);
 
   useEffect(() => {
-    const sync = () => setAuthed(!!getCurrentUser());
+    const sync = () => {
+      setAuthed(!!auth.current());
+      setOnboarded(!!getPreferences().onboarded);
+    };
     sync();
     setReady(true);
     window.addEventListener("bayan:auth", sync);
+    window.addEventListener("bayan:prefs", sync);
     window.addEventListener("storage", sync);
     return () => {
       window.removeEventListener("bayan:auth", sync);
+      window.removeEventListener("bayan:prefs", sync);
       window.removeEventListener("storage", sync);
     };
   }, []);
@@ -35,14 +42,24 @@ export function AppShell() {
   const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p));
 
   useEffect(() => {
-    if (ready && !authed && !isPublic) {
+    if (!ready) return;
+    if (!authed && !isPublic) {
       navigate({ to: "/welcome" });
+    } else if (authed && !onboarded && !isPublic) {
+      navigate({ to: "/onboarding" });
     }
-  }, [ready, authed, isPublic, navigate]);
+  }, [ready, authed, onboarded, isPublic, navigate]);
+
+  const handleSync = () => {
+    toast("Bayan is preparing your offline sanctuary.", {
+      description: "Verses, audio, and reflections — saved for the road ahead.",
+    });
+  };
 
   if (isPublic) {
     return (
       <>
+        <div className="bayan-mesh" aria-hidden />
         <AnimatePresence mode="wait">
           <motion.div
             key={pathname}
@@ -61,14 +78,16 @@ export function AppShell() {
 
   return (
     <div className="relative mx-auto min-h-screen max-w-md pb-28">
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 -z-10"
-        style={{
-          background:
-            "radial-gradient(60% 40% at 50% 0%, color-mix(in oklab, var(--gold) 14%, transparent), transparent 70%), radial-gradient(50% 30% at 80% 100%, color-mix(in oklab, var(--teal) 10%, transparent), transparent 70%)",
-        }}
-      />
+      <div className="bayan-mesh" aria-hidden />
+
+      <button
+        onClick={handleSync}
+        aria-label="Prepare offline"
+        className="haptic glass fixed right-5 top-5 z-30 flex h-9 w-9 items-center justify-center rounded-full text-teal/70"
+      >
+        <RefreshCw size={14} strokeWidth={1.8} />
+      </button>
+
       <main className="px-5 pt-6">
         <AnimatePresence mode="wait">
           <motion.div
@@ -84,14 +103,14 @@ export function AppShell() {
       </main>
 
       <nav className="fixed inset-x-0 bottom-0 z-40 flex justify-center px-4 pb-5">
-        <div className="glass shadow-glass flex w-full max-w-md items-center justify-around rounded-full px-3 py-2">
+        <div className="glass-strong flex w-full max-w-md items-center justify-around rounded-full px-3 py-2 shadow-[0_12px_40px_-12px_rgba(13,59,63,0.30)]">
           {tabs.map(({ to, label, icon: Icon }) => {
             const active = to === "/" ? pathname === "/" : pathname.startsWith(to);
             return (
               <Link
                 key={to}
                 to={to}
-                className="relative flex flex-1 flex-col items-center justify-center gap-0.5 rounded-full px-2 py-2 text-xs"
+                className="haptic relative flex flex-1 flex-col items-center justify-center gap-0.5 rounded-full px-2 py-2 text-xs"
               >
                 {active && (
                   <motion.span
