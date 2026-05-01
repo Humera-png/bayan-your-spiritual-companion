@@ -68,7 +68,7 @@ function HomePage() {
         className="flex items-center justify-between"
       >
         <div>
-          <p className="text-[11px] uppercase tracking-[0.22em] text-gold">{greeting}</p>
+          <p suppressHydrationWarning className="text-[11px] uppercase tracking-[0.22em] text-gold">{greeting}</p>
           <h1 className="font-display text-3xl text-teal">Bayan</h1>
         </div>
         <ProgressRing
