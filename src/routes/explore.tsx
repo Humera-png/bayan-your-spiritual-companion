@@ -216,6 +216,14 @@ function ResultCard({ verse, index }: { verse: VerseSnippet; index: number }) {
         {verse.arabic}
       </p>
       <p className="text-sm leading-relaxed text-foreground/80">“{verse.snippet}”</p>
+      {verse.context && (
+        <div className="mt-3 border-t border-gold/15 pt-3">
+          <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-gold">Context</p>
+          <p className="mt-1 text-[12px] leading-relaxed text-muted-foreground">
+            {verse.context}
+          </p>
+        </div>
+      )}
     </motion.article>
   );
 }
