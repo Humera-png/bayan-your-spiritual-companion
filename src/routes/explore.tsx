@@ -137,9 +137,21 @@ function ExplorePage() {
         </div>
 
         {loading ? (
-          <div className="glass shadow-soft flex items-center gap-3 rounded-2xl px-5 py-6">
-            <Loader2 size={18} className="animate-spin text-gold" />
-            <p className="text-sm text-teal">Searching the Quran…</p>
+          <div className="space-y-3">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="glass shadow-soft rounded-2xl p-4">
+                <div className="mb-3 flex items-center gap-2">
+                  <div className="bayan-skeleton h-6 w-6 rounded-full" />
+                  <div className="bayan-skeleton h-3 w-32" />
+                </div>
+                <div className="bayan-skeleton mb-2 ml-auto h-5 w-3/4" />
+                <div className="bayan-skeleton h-4 w-full" />
+                <div className="bayan-skeleton mt-1.5 h-4 w-2/3" />
+              </div>
+            ))}
+            <p className="pt-1 text-center text-xs italic text-gold">
+              {loadingMessage}
+            </p>
           </div>
         ) : results.length === 0 ? (
           <div className="glass rounded-2xl px-5 py-10 text-center text-sm text-muted-foreground">
