@@ -88,15 +88,24 @@ export function AyahCard({ ayah, variant = "compact", onMarkRead, showMarkRead }
             </p>
           </div>
         </div>
-        <button
-          onClick={handleHeart}
-          className={`rounded-full p-2 transition hover:bg-accent ${
-            saved ? "text-gold" : "text-teal/70 hover:text-gold"
-          }`}
-          aria-label="Save to collection"
-        >
-          <Heart size={18} fill={saved ? "currentColor" : "none"} />
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setShareOpen(true)}
+            className="haptic rounded-full p-2 text-teal/70 transition hover:bg-accent hover:text-gold"
+            aria-label="Share as light"
+          >
+            <Share2 size={17} />
+          </button>
+          <button
+            onClick={handleHeart}
+            className={`haptic rounded-full p-2 transition hover:bg-accent ${
+              saved ? "text-gold" : "text-teal/70 hover:text-gold"
+            }`}
+            aria-label="Save to collection"
+          >
+            <Heart size={18} fill={saved ? "currentColor" : "none"} />
+          </button>
+        </div>
       </header>
 
       <p
