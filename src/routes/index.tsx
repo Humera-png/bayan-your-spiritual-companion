@@ -7,6 +7,7 @@ import { StreakStrip } from "@/components/StreakStrip";
 import { AudioPlayer } from "@/components/AudioPlayer";
 import { computeStreak, getReadLog, type Ayah } from "@/lib/quran-api";
 import { getDailyVerse, updateUserStreak } from "@/services/quranApi";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -39,9 +40,13 @@ function HomePage() {
 
   const handleMark = async () => {
     if (!ayah) return;
-    await updateUserStreak(ayah.id);
+    const { streak: newStreak } = await updateUserStreak(ayah.id);
     setReadLog(getReadLog());
     setReadToday(true);
+    toast.success(`Marked as read ✨`, {
+      description:
+        newStreak > 1 ? `${newStreak}-day streak — keep going.` : "Your streak begins today.",
+    });
   };
 
   const greeting = greetingForNow();
