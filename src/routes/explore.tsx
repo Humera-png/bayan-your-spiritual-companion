@@ -125,11 +125,11 @@ function ExplorePage() {
             {TOPICS.map((t) => {
               const isActive = active === t;
               return (
-                <motion.button
+              <motion.button
                   key={t}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => onTopic(t)}
-                  className={`shrink-0 rounded-full px-4 py-2 text-sm transition ${
+                  className={`haptic shrink-0 rounded-full px-4 py-2 text-sm transition ${
                     isActive
                       ? "bg-gradient-teal text-cream shadow-soft"
                       : "glass text-teal hover:text-gold"
