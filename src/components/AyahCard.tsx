@@ -18,6 +18,7 @@ export function AyahCard({ ayah, variant = "compact", onMarkRead, showMarkRead }
   const [saved, setSaved] = useState(false);
   const [glow, setGlow] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const [collections, setCollections] = useState<string[]>(() =>
     typeof window !== "undefined" ? listCollections() : [],
   );
