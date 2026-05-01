@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, ChevronDown, Sparkles, Plus, Check } from "lucide-react";
+import { Heart, ChevronDown, Sparkles, Plus, Check, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import type { Ayah } from "@/lib/quran-api";
 import { saveToCollection, listCollections } from "@/lib/quran-api";
+import { ShareImageModal } from "@/components/ShareImageModal";
 
 interface Props {
   ayah: Ayah;
