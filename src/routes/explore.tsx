@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { BookOpen, Loader2, Search, Sparkles } from "lucide-react";
+import { BookOpen, Search, Sparkles } from "lucide-react";
 import { searchVerses, type VerseSnippet } from "@/services/quranApi";
 
 const TOPICS = [
@@ -35,6 +35,25 @@ function ExplorePage() {
   const [active, setActive] = useState<string | null>("Gratitude");
   const [results, setResults] = useState<VerseSnippet[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMessage, setLoadingMessage] = useState("Searching the Revelation…");
+
+  const themedMessage = (q: string) => {
+    const word = q.trim().toLowerCase();
+    if (!word) return "Searching the Revelation…";
+    const themed: Record<string, string> = {
+      anxiety: "Finding stillness in the Revelation…",
+      gratitude: "Gathering verses of thankfulness…",
+      patience: "Listening for sabr in the Revelation…",
+      family: "Searching verses on love and kin…",
+      work: "Finding strength for the day…",
+      forgiveness: "Seeking mercy in the Revelation…",
+      hope: "Searching for light in the Revelation…",
+      sadness: "Looking for comfort in the Revelation…",
+      guidance: "Asking for guidance in the Revelation…",
+      peace: "Finding peace in the Revelation…",
+    };
+    return themed[word] ?? `Finding "${q.trim()}" in the Revelation…`;
+  };
 
   useEffect(() => {
     searchVerses("Gratitude").then((r) => {
@@ -44,6 +63,7 @@ function ExplorePage() {
   }, []);
 
   const runSearch = async (q: string) => {
+    setLoadingMessage(themedMessage(q));
     setLoading(true);
     setResults([]);
     const r = await searchVerses(q);
@@ -137,9 +157,21 @@ function ExplorePage() {
         </div>
 
         {loading ? (
-          <div className="glass shadow-soft flex items-center gap-3 rounded-2xl px-5 py-6">
-            <Loader2 size={18} className="animate-spin text-gold" />
-            <p className="text-sm text-teal">Searching the Quran…</p>
+          <div className="space-y-3">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="glass shadow-soft rounded-2xl p-4">
+                <div className="mb-3 flex items-center gap-2">
+                  <div className="bayan-skeleton h-6 w-6 rounded-full" />
+                  <div className="bayan-skeleton h-3 w-32" />
+                </div>
+                <div className="bayan-skeleton mb-2 ml-auto h-5 w-3/4" />
+                <div className="bayan-skeleton h-4 w-full" />
+                <div className="bayan-skeleton mt-1.5 h-4 w-2/3" />
+              </div>
+            ))}
+            <p className="pt-1 text-center text-xs italic text-gold">
+              {loadingMessage}
+            </p>
           </div>
         ) : results.length === 0 ? (
           <div className="glass rounded-2xl px-5 py-10 text-center text-sm text-muted-foreground">

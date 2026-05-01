@@ -1,6 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Bell, BookOpen, Languages, Moon, Volume2 } from "lucide-react";
+import { Bell, BookOpen, Languages, LogOut, Moon, Volume2 } from "lucide-react";
+import { toast } from "sonner";
+import { getCurrentUser, signOut } from "@/lib/auth";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
@@ -34,11 +37,29 @@ const sections = [
 ];
 
 function SettingsPage() {
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    setName(getCurrentUser()?.name ?? "");
+  }, []);
+
+  const handleSignOut = () => {
+    signOut();
+    toast("Signed out", { description: "We'll keep your seat warm." });
+    navigate({ to: "/welcome" });
+  };
+
   return (
     <div className="space-y-6">
       <motion.header initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
         <p className="text-[11px] uppercase tracking-[0.22em] text-gold">Personalize</p>
         <h1 className="font-display text-3xl text-teal">Settings</h1>
+        {name && (
+          <p className="mt-1 text-sm text-muted-foreground">
+            Signed in as <span className="font-medium text-teal">{name}</span>
+          </p>
+        )}
       </motion.header>
 
       {sections.map((s, si) => (
@@ -71,7 +92,14 @@ function SettingsPage() {
         </motion.section>
       ))}
 
-      <p className="pt-4 text-center text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+      <button
+        onClick={handleSignOut}
+        className="glass shadow-soft flex w-full items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium text-teal transition hover:text-destructive"
+      >
+        <LogOut size={15} /> Sign out
+      </button>
+
+      <p className="pt-2 text-center text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
         Bayan · v0.1
       </p>
     </div>

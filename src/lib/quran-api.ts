@@ -24,6 +24,27 @@ export interface SavedItem {
   savedAt: string;
 }
 
+/** Default collection folders shown in the picker (UI seeds) */
+export const DEFAULT_COLLECTIONS = [
+  "Daily Peace",
+  "Tough Days",
+  "Gratitude",
+  "Reflection",
+] as const;
+
+/** Each mood maps to a small set of seed verse ids the search returns */
+const MOOD_INDEX: Record<string, string[]> = {
+  Anxiety: ["13:28", "94:5", "2:286"],
+  Gratitude: ["14:7"],
+  Patience: ["2:153", "94:5"],
+  Family: ["25:74"],
+  Work: ["94:5", "2:286"],
+  Forgiveness: ["39:53"],
+  Hope: ["13:28", "94:5", "3:139"],
+  Sadness: ["94:5", "13:28"],
+  Guidance: ["1:6"],
+};
+
 // ─── Content API (Quran MCP) ────────────────────────────────────────────────
 
 /** GET daily verse — pulls a curated ayah for today */
@@ -35,17 +56,30 @@ export async function getDailyAyah(): Promise<Ayah> {
 /** Semantic search across the Quran by mood / question */
 export async function semanticSearch(query: string): Promise<Ayah[]> {
   // TODO: wire to Quran MCP -> /search/semantic { q: query }
-  return MOCK_RESULTS.filter(
+  const q = query.trim().toLowerCase();
+  if (!q) return ALL_VERSES;
+  const moodHit = Object.entries(MOOD_INDEX).find(([m]) => m.toLowerCase() === q);
+  if (moodHit) {
+    const ids = new Set(moodHit[1]);
+    return ALL_VERSES.filter((a) => ids.has(a.id));
+  }
+  return ALL_VERSES.filter(
     (a) =>
-      a.translation.toLowerCase().includes(query.toLowerCase()) ||
-      query.length < 3,
+      a.translation.toLowerCase().includes(q) ||
+      a.surahName.toLowerCase().includes(q),
   );
+}
+
+/** List user's collection names (built-ins + any custom from saved items) */
+export function listCollections(): string[] {
+  const fromSaved = listSavedLocal().map((s) => s.collection);
+  return Array.from(new Set([...DEFAULT_COLLECTIONS, ...fromSaved]));
 }
 
 /** Mood-based discovery — curated sets per emotion */
 export async function moodSearch(mood: string): Promise<Ayah[]> {
   // TODO: wire to Quran MCP -> /search/mood/:mood
-  return MOCK_RESULTS;
+  return semanticSearch(mood);
 }
 
 /** Audio recitation stream URL */
@@ -143,7 +177,7 @@ const MOCK_DAILY: Ayah = {
   audioUrl: "https://cdn.islamic.network/quran/audio/128/ar.alafasy/1908.mp3",
 };
 
-const MOCK_RESULTS: Ayah[] = [
+const ALL_VERSES: Ayah[] = [
   MOCK_DAILY,
   {
     id: "94:5",
@@ -168,6 +202,46 @@ const MOCK_RESULTS: Ayah[] = [
     surahName: "Aal-E-Imran",
     arabic: "وَلَا تَهِنُوا۟ وَلَا تَحْزَنُوا۟ وَأَنتُمُ ٱلْأَعْلَوْنَ إِن كُنتُم مُّؤْمِنِينَ",
     translation: "Do not lose heart nor grieve, for you shall be uppermost if you are believers.",
+  },
+  {
+    id: "2:153",
+    surah: 2,
+    ayah: 153,
+    surahName: "Al-Baqarah",
+    arabic: "يَـٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ ٱسْتَعِينُوا۟ بِٱلصَّبْرِ وَٱلصَّلَوٰةِ ۚ إِنَّ ٱللَّهَ مَعَ ٱلصَّـٰبِرِينَ",
+    translation: "O you who believe, seek help through patience and prayer. Indeed, Allah is with the patient.",
+  },
+  {
+    id: "14:7",
+    surah: 14,
+    ayah: 7,
+    surahName: "Ibrahim",
+    arabic: "لَئِن شَكَرْتُمْ لَأَزِيدَنَّكُمْ",
+    translation: "If you are grateful, I will surely increase you in favor.",
+  },
+  {
+    id: "39:53",
+    surah: 39,
+    ayah: 53,
+    surahName: "Az-Zumar",
+    arabic: "لَا تَقْنَطُوا۟ مِن رَّحْمَةِ ٱللَّهِ ۚ إِنَّ ٱللَّهَ يَغْفِرُ ٱلذُّنُوبَ جَمِيعًا",
+    translation: "Do not despair of the mercy of Allah. Indeed, Allah forgives all sins.",
+  },
+  {
+    id: "25:74",
+    surah: 25,
+    ayah: 74,
+    surahName: "Al-Furqan",
+    arabic: "رَبَّنَا هَبْ لَنَا مِنْ أَزْوَٰجِنَا وَذُرِّيَّـٰتِنَا قُرَّةَ أَعْيُنٍ",
+    translation: "Our Lord, grant us from our spouses and offspring comfort to our eyes.",
+  },
+  {
+    id: "1:6",
+    surah: 1,
+    ayah: 6,
+    surahName: "Al-Fatihah",
+    arabic: "ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ",
+    translation: "Guide us to the straight path.",
   },
 ];
 
