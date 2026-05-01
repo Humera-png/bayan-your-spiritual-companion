@@ -177,7 +177,7 @@ const MOCK_DAILY: Ayah = {
   audioUrl: "https://cdn.islamic.network/quran/audio/128/ar.alafasy/1908.mp3",
 };
 
-const MOCK_RESULTS: Ayah[] = [
+const ALL_VERSES: Ayah[] = [
   MOCK_DAILY,
   {
     id: "94:5",
@@ -202,6 +202,46 @@ const MOCK_RESULTS: Ayah[] = [
     surahName: "Aal-E-Imran",
     arabic: "وَلَا تَهِنُوا۟ وَلَا تَحْزَنُوا۟ وَأَنتُمُ ٱلْأَعْلَوْنَ إِن كُنتُم مُّؤْمِنِينَ",
     translation: "Do not lose heart nor grieve, for you shall be uppermost if you are believers.",
+  },
+  {
+    id: "2:153",
+    surah: 2,
+    ayah: 153,
+    surahName: "Al-Baqarah",
+    arabic: "يَـٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ ٱسْتَعِينُوا۟ بِٱلصَّبْرِ وَٱلصَّلَوٰةِ ۚ إِنَّ ٱللَّهَ مَعَ ٱلصَّـٰبِرِينَ",
+    translation: "O you who believe, seek help through patience and prayer. Indeed, Allah is with the patient.",
+  },
+  {
+    id: "14:7",
+    surah: 14,
+    ayah: 7,
+    surahName: "Ibrahim",
+    arabic: "لَئِن شَكَرْتُمْ لَأَزِيدَنَّكُمْ",
+    translation: "If you are grateful, I will surely increase you in favor.",
+  },
+  {
+    id: "39:53",
+    surah: 39,
+    ayah: 53,
+    surahName: "Az-Zumar",
+    arabic: "لَا تَقْنَطُوا۟ مِن رَّحْمَةِ ٱللَّهِ ۚ إِنَّ ٱللَّهَ يَغْفِرُ ٱلذُّنُوبَ جَمِيعًا",
+    translation: "Do not despair of the mercy of Allah. Indeed, Allah forgives all sins.",
+  },
+  {
+    id: "25:74",
+    surah: 25,
+    ayah: 74,
+    surahName: "Al-Furqan",
+    arabic: "رَبَّنَا هَبْ لَنَا مِنْ أَزْوَٰجِنَا وَذُرِّيَّـٰتِنَا قُرَّةَ أَعْيُنٍ",
+    translation: "Our Lord, grant us from our spouses and offspring comfort to our eyes.",
+  },
+  {
+    id: "1:6",
+    surah: 1,
+    ayah: 6,
+    surahName: "Al-Fatihah",
+    arabic: "ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ",
+    translation: "Guide us to the straight path.",
   },
 ];
 
