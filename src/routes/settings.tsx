@@ -74,7 +74,14 @@ function SettingsPage() {
         </motion.section>
       ))}
 
-      <p className="pt-4 text-center text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+      <button
+        onClick={handleSignOut}
+        className="glass shadow-soft flex w-full items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium text-teal transition hover:text-destructive"
+      >
+        <LogOut size={15} /> Sign out
+      </button>
+
+      <p className="pt-2 text-center text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
         Bayan · v0.1
       </p>
     </div>
