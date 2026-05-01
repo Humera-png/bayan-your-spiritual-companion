@@ -44,10 +44,10 @@ function AuthPage() {
     setLoading(false);
     toast.success(isSignup ? `Welcome, ${user.name} ✨` : `Welcome back, ${user.name}`, {
       description: isSignup
-        ? "Your daily ritual begins now."
+        ? "Let's personalize your daily ritual."
         : "Your verse is waiting for you.",
     });
-    navigate({ to: "/" });
+    navigate({ to: isSignup ? "/onboarding" : "/" });
   };
 
   const onSocial = async (provider: "google" | "apple") => {
