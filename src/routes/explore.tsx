@@ -35,6 +35,25 @@ function ExplorePage() {
   const [active, setActive] = useState<string | null>("Gratitude");
   const [results, setResults] = useState<VerseSnippet[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMessage, setLoadingMessage] = useState("Searching the Revelation…");
+
+  const themedMessage = (q: string) => {
+    const word = q.trim().toLowerCase();
+    if (!word) return "Searching the Revelation…";
+    const themed: Record<string, string> = {
+      anxiety: "Finding stillness in the Revelation…",
+      gratitude: "Gathering verses of thankfulness…",
+      patience: "Listening for sabr in the Revelation…",
+      family: "Searching verses on love and kin…",
+      work: "Finding strength for the day…",
+      forgiveness: "Seeking mercy in the Revelation…",
+      hope: "Searching for light in the Revelation…",
+      sadness: "Looking for comfort in the Revelation…",
+      guidance: "Asking for guidance in the Revelation…",
+      peace: "Finding peace in the Revelation…",
+    };
+    return themed[word] ?? `Finding "${q.trim()}" in the Revelation…`;
+  };
 
   useEffect(() => {
     searchVerses("Gratitude").then((r) => {
@@ -44,6 +63,7 @@ function ExplorePage() {
   }, []);
 
   const runSearch = async (q: string) => {
+    setLoadingMessage(themedMessage(q));
     setLoading(true);
     setResults([]);
     const r = await searchVerses(q);
