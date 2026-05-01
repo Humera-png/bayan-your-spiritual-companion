@@ -161,6 +161,39 @@
   }
   .animate-gentle-float { animation: gentle-float 4s ease-in-out infinite; }
 
+  .bayan-input {
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid color-mix(in oklab, var(--gold) 20%, transparent);
+    background: color-mix(in oklab, var(--cream) 60%, transparent);
+    padding: 0.7rem 0.95rem;
+    font-size: 0.9rem;
+    color: var(--foreground);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  .bayan-input::placeholder { color: color-mix(in oklab, var(--teal) 40%, transparent); }
+  .bayan-input:focus {
+    border-color: color-mix(in oklab, var(--gold) 60%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--gold) 14%, transparent);
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .bayan-skeleton {
+    background: linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--teal) 6%, transparent) 0%,
+      color-mix(in oklab, var(--gold) 14%, transparent) 50%,
+      color-mix(in oklab, var(--teal) 6%, transparent) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.6s infinite linear;
+    border-radius: 8px;
+  }
+
   .bayan-range {
     -webkit-appearance: none;
     appearance: none;
