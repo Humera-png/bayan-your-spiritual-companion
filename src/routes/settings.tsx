@@ -1,6 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Bell, BookOpen, Languages, Moon, Volume2 } from "lucide-react";
+import { Bell, BookOpen, Languages, LogOut, Moon, Volume2 } from "lucide-react";
+import { toast } from "sonner";
+import { getCurrentUser, signOut } from "@/lib/auth";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
