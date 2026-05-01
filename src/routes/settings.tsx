@@ -37,11 +37,29 @@ const sections = [
 ];
 
 function SettingsPage() {
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    setName(getCurrentUser()?.name ?? "");
+  }, []);
+
+  const handleSignOut = () => {
+    signOut();
+    toast("Signed out", { description: "We'll keep your seat warm." });
+    navigate({ to: "/welcome" });
+  };
+
   return (
     <div className="space-y-6">
       <motion.header initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
         <p className="text-[11px] uppercase tracking-[0.22em] text-gold">Personalize</p>
         <h1 className="font-display text-3xl text-teal">Settings</h1>
+        {name && (
+          <p className="mt-1 text-sm text-muted-foreground">
+            Signed in as <span className="font-medium text-teal">{name}</span>
+          </p>
+        )}
       </motion.header>
 
       {sections.map((s, si) => (
