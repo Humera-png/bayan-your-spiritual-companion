@@ -84,8 +84,16 @@ function HomePage() {
             })}
           </span>
         </div>
-        {ayah && (
+        {ayah ? (
           <AyahCard ayah={ayah} variant="hero" showMarkRead={!readToday} onMarkRead={handleMark} />
+        ) : (
+          <div className="glass shadow-soft rounded-3xl p-6">
+            <div className="bayan-skeleton mb-4 h-5 w-1/3" />
+            <div className="bayan-skeleton mb-2 ml-auto h-7 w-3/4" />
+            <div className="bayan-skeleton mb-2 ml-auto h-7 w-2/3" />
+            <div className="bayan-skeleton mt-5 h-4 w-full" />
+            <div className="bayan-skeleton mt-2 h-4 w-5/6" />
+          </div>
         )}
       </section>
 
