@@ -24,6 +24,27 @@ export interface SavedItem {
   savedAt: string;
 }
 
+/** Default collection folders shown in the picker (UI seeds) */
+export const DEFAULT_COLLECTIONS = [
+  "Daily Peace",
+  "Tough Days",
+  "Gratitude",
+  "Reflection",
+] as const;
+
+/** Each mood maps to a small set of seed verse ids the search returns */
+const MOOD_INDEX: Record<string, string[]> = {
+  Anxiety: ["13:28", "94:5", "2:286"],
+  Gratitude: ["14:7"],
+  Patience: ["2:153", "94:5"],
+  Family: ["25:74"],
+  Work: ["94:5", "2:286"],
+  Forgiveness: ["39:53"],
+  Hope: ["13:28", "94:5", "3:139"],
+  Sadness: ["94:5", "13:28"],
+  Guidance: ["1:6"],
+};
+
 // ─── Content API (Quran MCP) ────────────────────────────────────────────────
 
 /** GET daily verse — pulls a curated ayah for today */
@@ -35,11 +56,24 @@ export async function getDailyAyah(): Promise<Ayah> {
 /** Semantic search across the Quran by mood / question */
 export async function semanticSearch(query: string): Promise<Ayah[]> {
   // TODO: wire to Quran MCP -> /search/semantic { q: query }
-  return MOCK_RESULTS.filter(
+  const q = query.trim().toLowerCase();
+  if (!q) return ALL_VERSES;
+  const moodHit = Object.entries(MOOD_INDEX).find(([m]) => m.toLowerCase() === q);
+  if (moodHit) {
+    const ids = new Set(moodHit[1]);
+    return ALL_VERSES.filter((a) => ids.has(a.id));
+  }
+  return ALL_VERSES.filter(
     (a) =>
-      a.translation.toLowerCase().includes(query.toLowerCase()) ||
-      query.length < 3,
+      a.translation.toLowerCase().includes(q) ||
+      a.surahName.toLowerCase().includes(q),
   );
+}
+
+/** List user's collection names (built-ins + any custom from saved items) */
+export function listCollections(): string[] {
+  const fromSaved = listSavedLocal().map((s) => s.collection);
+  return Array.from(new Set([...DEFAULT_COLLECTIONS, ...fromSaved]));
 }
 
 /** Mood-based discovery — curated sets per emotion */
