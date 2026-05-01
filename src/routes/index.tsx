@@ -91,7 +91,7 @@ function HomePage() {
       <section className="space-y-2">
         <div className="flex items-baseline justify-between px-1">
           <h2 className="font-display text-lg text-teal">Verse of the day</h2>
-          <span className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+          <span suppressHydrationWarning className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
             {new Date().toLocaleDateString(undefined, {
               month: "long",
               day: "numeric",
