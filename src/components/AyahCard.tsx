@@ -155,11 +155,13 @@ export function AyahCard({ ayah, variant = "compact", onMarkRead, showMarkRead }
       {showMarkRead && (
         <button
           onClick={handleRead}
-          className="bg-gradient-teal mt-6 w-full rounded-2xl py-3 text-sm font-medium text-cream shadow-soft transition active:scale-[0.98]"
+          className="haptic bg-gradient-teal mt-6 w-full rounded-2xl py-3 text-sm font-medium text-cream shadow-soft"
         >
           Mark as Read
         </button>
       )}
+
+      <ShareImageModal ayah={ayah} open={shareOpen} onClose={() => setShareOpen(false)} />
 
       <AnimatePresence>
         {pickerOpen && (
